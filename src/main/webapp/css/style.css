@@ -90,12 +90,12 @@ button {
     background-color: #f8d7da;
 }
 
-table#employee_list th {
+table#user_list th {
     width: 30%;
     padding: 10px 2%;
 }
 
-table#employee_list td {
+table#user_list td {
     width: 29%;
     padding: 10px 2%;
 }
@@ -118,7 +118,7 @@ select {
     display: inline-block;
 }
 
-#employee_name {
+#user_name {
     color: #cccccc;
     width: 36%;
     padding-right: 3%;
