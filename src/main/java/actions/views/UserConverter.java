@@ -15,8 +15,8 @@ public class UserConverter {
 
     /**
      * ViewモデルのインスタンスからDTOモデルのインスタンスを作成する
-     * @param ev EmployeeViewのインスタンス
-     * @return Employeeのインスタンス
+     * @param ev   UserViewのインスタンス
+     * @return   Userのインスタンス
      */
     public static User toModel(UserView ev) {
 

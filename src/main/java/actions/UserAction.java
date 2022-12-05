@@ -44,11 +44,11 @@ public class UserAction extends ActionBase {
         int page = getPage();
         List<UserView> users = service.getPerPage(page);
 
-        //全ての従業員データの件数を取得
+        //全てのユーザーデータの件数を取得
         long UserCount = service.countAll();
 
-        putRequestScope(AttributeConst.USER, users); //取得した従業員データ
-        putRequestScope(AttributeConst.EMP_COUNT, UserCount); //全ての従業員データの件数
+        putRequestScope(AttributeConst.USER, users); //取得したユーザーデータ
+        putRequestScope(AttributeConst.EMP_COUNT, UserCount); //全てのユーザーデータの件数
         putRequestScope(AttributeConst.PAGE, page); //ページ数
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
 
