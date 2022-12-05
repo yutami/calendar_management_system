@@ -162,3 +162,7 @@ pre {
 h3 {
     font-size: larger;
 }
+
+select {
+    height: 30px;
+}
