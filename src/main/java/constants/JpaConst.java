@@ -12,9 +12,9 @@ public interface JpaConst {
     //データ取得件数の最大値
     int ROW_PER_PAGE = 15; //1ページに表示するレコードの数
 
-    //従業員テーブル
+    //ユーザーテーブル
     String TABLE_EMP = "users"; //テーブル名
-    //従業員テーブルカラム
+    //ユーザーテーブルカラム
     String EMP_COL_ID = "id"; //id
     String EMP_COL_CODE = "code"; //ユーザー番号
     String EMP_COL_NAME = "name"; //氏名
@@ -47,7 +47,7 @@ public interface JpaConst {
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
-    String JPQL_PARM_EMPLOYEE = "user"; //ユーザー
+    String JPQL_PARM_USER = "user"; //ユーザー
 
     //NamedQueryの nameとquery
     //全てのユーザーをidの降順に取得する
@@ -70,9 +70,9 @@ public interface JpaConst {
     String Q_REP_COUNT_DEF = "SELECT COUNT(r) FROM Report AS r";
     //指定したユーザーが作成した予定を全件idの降順で取得する
     String Q_REP_GET_ALL_MINE = ENTITY_REP + ".getAllMine";
-    String Q_REP_GET_ALL_MINE_DEF = "SELECT r FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY r.id DESC";
+    String Q_REP_GET_ALL_MINE_DEF = "SELECT r FROM Report AS r WHERE r.user = :" + JPQL_PARM_USER + " ORDER BY r.id DESC";
     //指定したユーザーが作成した予定の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
-    String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
+    String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.user = :" + JPQL_PARM_USER;
 
 }

@@ -77,7 +77,7 @@ public class AuthAction extends ActionBase {
 
                 //ログインしたユーザーのDBデータを取得
                  UserView ev = service.findOne(code, plainPass, pepper);
-                //セッションにログインした従業員を設定
+                //セッションにログインしたユーザーを設定
                 putSessionScope(AttributeConst.LOGIN_EMP, ev);
                 //セッションにログイン完了のフラッシュメッセージを設定
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_LOGINED.getMessage());
@@ -91,7 +91,7 @@ public class AuthAction extends ActionBase {
             putRequestScope(AttributeConst.TOKEN, getTokenId());
             //認証失敗エラーメッセージ表示フラグをたてる
             putRequestScope(AttributeConst.LOGIN_ERR, true);
-            //入力された従業員コードを設定
+            //入力されたユーザーコードを設定
             putRequestScope(AttributeConst.EMP_CODE, code);
 
             //ログイン画面を表示
@@ -99,5 +99,22 @@ public class AuthAction extends ActionBase {
         }
     }
 
+    /**
+     * ログアウト処理を行う
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void logout() throws ServletException, IOException {
+
+        //セッションからログインユーザーのパラメータを削除
+        removeSessionScope(AttributeConst.LOGIN_EMP);
+
+        //セッションにログアウト時のフラッシュメッセージを追加
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_LOGOUT.getMessage());
+
+        //ログイン画面にリダイレクト
+        redirect(ForwardConst.ACT_AUTH, ForwardConst.CMD_SHOW_LOGIN);
+
+    }
 
 }

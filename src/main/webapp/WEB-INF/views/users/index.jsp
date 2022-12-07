@@ -4,9 +4,11 @@
 <%@ page import="constants.ForwardConst" %>
 
 <c:set var="actEmp" value="${ForwardConst.ACT_EMP.getValue()}" />
+<c:set var="actAuth" value="${ForwardConst.ACT_AUTH.getValue()}" />
 <c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
 <c:set var="commNew" value="${ForwardConst.CMD_NEW.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
+<c:set var="commShowlo" value="${ForwardConst.CMD_SHOW_LOGIN.getValue()}" />
 
 <c:import url="../layout/app.jsp">
     <c:param name="content">
@@ -15,47 +17,14 @@
                 <c:out value="${flush}"></c:out>
             </div>
         </c:if>
-        <h2>従業員　一覧</h2>
+        <h2>新規登録完了しました。</h2>
         <table id="user_list">
             <tbody>
-                <tr>
-                    <th>社員番号</th>
-                    <th>氏名</th>
-                    <th>操作</th>
-                </tr>
-                 <c:forEach var="user" items="${users}" varStatus="status">
-                    <tr class="row${status.count % 2}">
-                        <td><c:out value="${user.code}" /></td>
-                        <td><c:out value="${user.name}" /></td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${user.deleteFlag == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()}">
-                                    （削除済み）
-                                </c:when>
-                                <c:otherwise>
-                                    <a href="<c:url value='?action=${actEmp}&command=${commShow}&id=${user.id}' />">詳細を見る</a>
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                    </tr>
-                </c:forEach>
             </tbody>
         </table>
-
         <div id="pagination">
-            （全 ${users_count} 件）<br />
-            <c:forEach var="i" begin="1" end="${((users_count - 1) / maxRow) + 1}" step="1">
-                <c:choose>
-                    <c:when test="${i == page}">
-                        <c:out value="${i}" />&nbsp;
-                    </c:when>
-                    <c:otherwise>
-                        <a href="<c:url value='?action=${actEmp}&command=${commIdx}&page=${i}' />"><c:out value="${i}" /></a>&nbsp;
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
         </div>
-        <p><a href="<c:url value='?action=${actEmp}&command=${commNew}' />">新規従業員の登録</a></p>
+        <p><a href="<c:url value='?action=${actAuth}&command=${commShowlo}' />">ログインページへ</a></p>
 
     </c:param>
 </c:import>

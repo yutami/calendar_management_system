@@ -30,7 +30,6 @@
 <label for="${AttributeConst.EMP_ADMIN_FLG.getValue()}">権限</label><br />
 <select name="${AttributeConst.EMP_ADMIN_FLG.getValue()}" id="${AttributeConst.EMP_ADMIN_FLG.getValue()}">
     <option value="${AttributeConst.ROLE_GENERAL.getIntegerValue()}"<c:if test="${user.adminFlag == AttributeConst.ROLE_GENERAL.getIntegerValue()}"> selected</c:if>>一般</option>
-    <option value="${AttributeConst.ROLE_ADMIN.getIntegerValue()}"<c:if test="${user.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}"> selected</c:if>>管理者</option>
 </select>
 <br /><br />
 <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${User.id}" />
