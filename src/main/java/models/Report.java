@@ -38,7 +38,15 @@ import lombok.Setter;
             query = JpaConst.Q_REP_GET_ALL_MINE_DEF),
     @NamedQuery(
             name = JpaConst.Q_REP_COUNT_ALL_MINE,
-            query = JpaConst.Q_REP_COUNT_ALL_MINE_DEF)
+            query = JpaConst.Q_REP_COUNT_ALL_MINE_DEF),
+    @NamedQuery(
+            name = "getMyReportsReserve_day",
+            query = "SELECT COUNT(c) FROM Report AS c WHERE c.reserve_day = :reserve_day"
+            )
+    ,@NamedQuery(
+            name = JpaConst.Q_REP_GET_USER,
+            query = JpaConst.Q_REP_GET_USER_DEF
+            )
 })
 
 @Getter //全てのクラスフィールドについてgetterを自動生成する(Lombok)
@@ -94,4 +102,10 @@ public class Report {
     @Column(name = JpaConst.REP_COL_UPDATED_AT, nullable = false)
     private LocalDateTime updatedAt;
 
+
+
+    @Column(name="reserve_day", nullable=false)
+    private LocalDateTime reserve_day;
 }
+
+

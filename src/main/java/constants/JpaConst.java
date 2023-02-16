@@ -30,7 +30,7 @@ public interface JpaConst {
     int EMP_DEL_FALSE = 0; //削除フラグOFF(現役)
 
     //予定テーブル
-    String TABLE_REP = "reports"; //テーブル名
+    String TABLE_REP = "report"; //テーブル名
     //予定テーブルカラム
     String REP_COL_ID = "id"; //id
     String REP_COL_EMP = "user_id"; //予定を作成したユーザのid
@@ -39,13 +39,17 @@ public interface JpaConst {
     String REP_COL_CONTENT = "content"; //予定の内容
     String REP_COL_CREATED_AT = "created_at"; //登録日時
     String REP_COL_UPDATED_AT = "updated_at"; //更新日時
+    String REP_COL_RESERVE_DAY ="reserve_day"; //予定日時
+
+
+
 
     //Entity名
     String ENTITY_EMP = "user"; //ユーザー
     String ENTITY_REP = "report"; //予定
 
     //JPQL内パラメータ
-    String JPQL_PARM_CODE = "code"; //社員番号
+    String JPQL_PARM_CODE = "code"; //ユーザー番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_USER = "user"; //ユーザー
 
@@ -74,5 +78,8 @@ public interface JpaConst {
     //指定したユーザーが作成した予定の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.user = :" + JPQL_PARM_USER;
+    //ログインユーザーの該当する月の予定情報を取得する
+    String Q_REP_GET_USER = ENTITY_REP + ".getMyReportsReserve_day";
+    String Q_REP_GET_USER_DEF =  "SELECT e FROM Report AS e WHERE e.reserve_day >= :firstDateTime AND e.reserve_day <= :lastDateTime AND e.user = :"+ JPQL_PARM_USER;
 
 }

@@ -27,6 +27,11 @@
                     <th>内容</th>
                     <td><pre><c:out value="${report.content}" /></pre></td>
                 </tr>
+               <tr>
+                    <th>予定日時</th>
+                      <fmt:parseDate value="${report.reserve_day}" pattern="yyyy-MM-dd'T'HH:mm" var="reserveDay" type="date" />
+                    <td><fmt:formatDate value="${reserveDay}" pattern="yyyy-MM-dd'T'HH:mm" /></td>
+                </tr>
                 <tr>
                     <th>登録日時</th>
                     <fmt:parseDate value="${report.createdAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="createDay" type="date" />

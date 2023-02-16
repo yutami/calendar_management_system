@@ -27,29 +27,30 @@ public class ReportView {
      * 日報を登録したユーザー
      */
     private UserView user;
-
     /**
      * いつの日報かを示す日付
      */
     private LocalDate reportDate;
-
     /**
      * 日報のタイトル
      */
     private String title;
-
     /**
      * 日報の内容
      */
     private String content;
-
     /**
      * 登録日時
      */
     private LocalDateTime createdAt;
-
     /**
      * 更新日時
      */
     private LocalDateTime updatedAt;
+   /**
+    * 予定日時
+    */
+   private LocalDateTime reserve_day;
+
+
 }

@@ -6,18 +6,18 @@ import java.util.List;
 import actions.views.ReportConverter;
 import actions.views.ReportView;
 import actions.views.UserConverter;
-import actions.views. UserView;
+import actions.views.UserView;
 import constants.JpaConst;
 import models.Report;
 import models.validators.ReportValidator;
 
 /**
- * 日報テーブルの操作に関わる処理を行うクラス
+ * 予定テーブルの操作に関わる処理を行うクラス
  */
 public class ReportService extends ServiceBase {
 
     /**
-     * 指定したユーザーが作成した日報データを、指定されたページ数の一覧画面に表示する分取得しReportViewのリストで返却する
+     * 指定したユーザーが作成した予定データを、指定されたページ数の一覧画面に表示する分取得しReportViewのリストで返却する
      * @param user ユーザー
      * @param page ページ数
      * @return 一覧画面に表示するデータのリスト
@@ -33,9 +33,9 @@ public class ReportService extends ServiceBase {
     }
 
     /**
-     * 指定した従業員が作成した日報データの件数を取得し、返却する
-     * @param employee
-     * @return 日報データの件数
+     * 指定したユーザーが作成した予定データの件数を取得し、返却する
+     * @param user
+     * @return 予定データの件数
      */
     public long countAllMine(UserView user) {
 
@@ -47,7 +47,7 @@ public class ReportService extends ServiceBase {
     }
 
     /**
-     * 指定されたページ数の一覧画面に表示する日報データを取得し、ReportViewのリストで返却する
+     * 指定されたページ数の一覧画面に表示する予定データを取得し、ReportViewのリストで返却する
      * @param page ページ数
      * @return 一覧画面に表示するデータのリスト
      */
@@ -61,7 +61,7 @@ public class ReportService extends ServiceBase {
     }
 
     /**
-     * 日報テーブルのデータの件数を取得し、返却する
+     * 予定テーブルのデータの件数を取得し、返却する
      * @return データの件数
      */
     public long countAll() {
@@ -80,8 +80,8 @@ public class ReportService extends ServiceBase {
     }
 
     /**
-     * 画面から入力された日報の登録内容を元にデータを1件作成し、日報テーブルに登録する
-     * @param rv 日報の登録内容
+     * 画面から入力された予定の登録内容を元にデータを1件作成し、予定テーブルに登録する
+     * @param rv 予定の登録内容
      * @return バリデーションで発生したエラーのリスト
      */
     public List<String> create(ReportView rv) {
@@ -98,8 +98,8 @@ public class ReportService extends ServiceBase {
     }
 
     /**
-     * 画面から入力された日報の登録内容を元に、日報データを更新する
-     * @param rv 日報の更新内容
+     * 画面から入力された予定の登録内容を元に、予定データを更新する
+     * @param rv 予定の更新内容
      * @return バリデーションで発生したエラーのリスト
      */
     public List<String> update(ReportView rv) {
@@ -130,8 +130,8 @@ public class ReportService extends ServiceBase {
     }
 
     /**
-     * 日報データを1件登録する
-     * @param rv 日報データ
+     * 予定データを1件登録する
+     * @param rv 予定データ
      */
     private void createInternal(ReportView rv) {
 
@@ -142,8 +142,8 @@ public class ReportService extends ServiceBase {
     }
 
     /**
-     * 日報データを更新する
-     * @param rv 日報データ
+     * 予定データを更新する
+     * @param rv 予定データ
      */
     private void updateInternal(ReportView rv) {
 
@@ -153,5 +153,16 @@ public class ReportService extends ServiceBase {
         em.getTransaction().commit();
 
     }
+    public List<Report> getAll(UserView user,LocalDateTime firstDateTime,LocalDateTime lastDateTime) {
+
+        List<Report> report = em.createNamedQuery(JpaConst.Q_REP_GET_USER,Report.class)
+             .setParameter(JpaConst.JPQL_PARM_USER,UserConverter.toModel(user))
+             .setParameter("firstDateTime",firstDateTime)
+             .setParameter("lastDateTime", lastDateTime)
+
+             .getResultList();
+
+         return report;
+       }
 
 }

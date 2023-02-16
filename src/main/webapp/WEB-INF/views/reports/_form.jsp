@@ -28,6 +28,13 @@
 <label for="${AttributeConst.REP_CONTENT.getValue()}">内容</label><br />
 <textarea  name="${AttributeConst.REP_CONTENT.getValue()}" id="${AttributeConst.REP_CONTENT.getValue()}" rows="10" cols="50">${report.content}</textarea>
 <br /><br />
+
+<label for="${AttributeConst.REP_COL_RESERVE_DAY.getValue()}">予定日時</label><br />
+<input type="datetime-local" name="${AttributeConst.REP_COL_RESERVE_DAY.getValue()}" value=""${report.reserve_day}/>
+<br /><br />
+
+
+
 <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
 <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
 <button type="submit">登録</button>

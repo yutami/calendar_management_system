@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 従業員データのDTOモデル
+ * ユーザーデータのDTOモデル
  *
  */
 @Table(name = JpaConst.TABLE_EMP)

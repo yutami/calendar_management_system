@@ -13,12 +13,12 @@ import models.validators.UserValidator;
 import utils.EncryptUtil;
 
 /**
- * 従業員テーブルの操作に関わる処理を行うクラス
+ * ユーザーテーブルの操作に関わる処理を行うクラス
  */
 public class UserService extends ServiceBase {
 
     /**
-     * 指定されたページ数の一覧画面に表示するデータを取得し、EmployeeViewのリストで返却する
+     * 指定されたページ数の一覧画面に表示するデータを取得し、 UserViewのリストで返却する
      * @param page ページ数
      * @return 表示するデータのリスト
      */
@@ -32,8 +32,8 @@ public class UserService extends ServiceBase {
     }
 
     /**
-     * 従業員テーブルのデータの件数を取得し、返却する
-     * @return 従業員テーブルのデータの件数
+     * ユーザーテーブルのデータの件数を取得し、返却する
+     * @return ユーザーテーブルのデータの件数
      */
     public long countAll() {
         long empCount = (long) em.createNamedQuery(JpaConst.Q_EMP_COUNT, Long.class)
@@ -55,7 +55,7 @@ public class UserService extends ServiceBase {
             //パスワードのハッシュ化
             String pass = EncryptUtil.getPasswordEncrypt(plainPass, pepper);
 
-            //社員番号とハッシュ化済パスワードを条件に未削除の従業員を1件取得する
+            //ユーザー番号とハッシュ化済パスワードを条件に未削除の従業員を1件取得する
             e = em.createNamedQuery(JpaConst.Q_EMP_GET_BY_CODE_AND_PASS, User.class)
                     .setParameter(JpaConst.JPQL_PARM_CODE, code)
                     .setParameter(JpaConst.JPQL_PARM_PASSWORD, pass)

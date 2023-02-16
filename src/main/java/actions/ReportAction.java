@@ -2,6 +2,7 @@ package actions;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -42,15 +43,18 @@ public class ReportAction extends ActionBase {
      */
     public void index() throws ServletException, IOException {
 
+      //セッションからログイン中の従業員情報を取得
+          UserView loginUser = (UserView) getSessionScope(AttributeConst.LOGIN_EMP);
+
         //指定されたページ数の一覧画面に表示する日報データを取得
         int page = getPage();
-        List<ReportView> reports = service.getAllPerPage(page);
+        List<ReportView> reports = service.getMinePerPage(loginUser, page);
 
-        //全日報データの件数を取得
-        long reportsCount = service.countAll();
+      //ログイン中の従業員が作成した日報データの件数を取得
+        long myReportsCount = service.countAllMine(loginUser);
 
         putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
-        putRequestScope(AttributeConst.REP_COUNT, reportsCount); //全ての日報データの件数
+        putRequestScope(AttributeConst.REP_COUNT, myReportsCount); //ログイン中の従業員が作成した日報の数
         putRequestScope(AttributeConst.PAGE, page); //ページ数
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
 
@@ -94,7 +98,8 @@ public class ReportAction extends ActionBase {
         //CSRF対策 tokenのチェック
         if (checkToken()) {
 
-            //予定の日付が入力されていなければ、今日の日付を設定
+            //日報の日付が入力されていなければ、今日の日付を設定
+
             LocalDate day = null;
             if (getRequestParam(AttributeConst.REP_DATE) == null
                     || getRequestParam(AttributeConst.REP_DATE).equals("")) {
@@ -104,9 +109,11 @@ public class ReportAction extends ActionBase {
             }
 
             //セッションからログイン中のユーザー情報を取得
-              UserView ev = (UserView) getSessionScope(AttributeConst.LOGIN_EMP);
+            UserView ev = (UserView) getSessionScope(AttributeConst.LOGIN_EMP);
 
-            //パラメータの値をもとに予定情報のインスタンスを作成する
+            //パラメータの値をもとに日報情報のインスタンスを作成する
+            // ★★★LocalDateTime型に型変換★★★
+            LocalDateTime day1 = LocalDateTime.parse(getRequestParam(AttributeConst.REP_COL_RESERVE_DAY));
             ReportView rv = new ReportView(
                     null,
                     ev, //ログインしているユーザーを、予定作成者として登録する
@@ -114,9 +121,10 @@ public class ReportAction extends ActionBase {
                     getRequestParam(AttributeConst.REP_TITLE),
                     getRequestParam(AttributeConst.REP_CONTENT),
                     null,
-                    null);
+                    null,
+                    day1);
 
-            //予定情報登録
+            //日報情報登録
             List<String> errors = service.create(rv);
 
             if (errors.size() > 0) {
@@ -192,46 +200,47 @@ public class ReportAction extends ActionBase {
         }
     }
 
-        /**
-         * 更新を行う
-         * @throws ServletException
-         * @throws IOException
-         */
-        public void update() throws ServletException, IOException {
+    /**
+     * 更新を行う
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void update() throws ServletException, IOException {
 
-            //CSRF対策 tokenのチェック
-            if (checkToken()) {
+        //CSRF対策 tokenのチェック
+        if (checkToken()) {
 
-                //idを条件に日報データを取得する
-                ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+            //idを条件に日報データを取得する
+            ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
 
-                //入力された日報内容を設定する
-                rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
-                rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
-                rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
+            //入力された日報内容を設定する
+            rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
+            rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
+            rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
+            rv.setReserve_day(LocalDateTime.parse(getRequestParam(AttributeConst.REP_COL_RESERVE_DAY))); // ★★★ LocalDateTime型に型変換 ★★★
 
-                //日報データを更新する
-                List<String> errors = service.update(rv);
+            //日報データを更新する
+            List<String> errors = service.update(rv);
 
-                if (errors.size() > 0) {
-                    //更新中にエラーが発生した場合
+            if (errors.size() > 0) {
+                //更新中にエラーが発生した場合
 
-                    putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
-                    putRequestScope(AttributeConst.REPORT, rv); //入力された日報情報
-                    putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
+                putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+                putRequestScope(AttributeConst.REPORT, rv); //入力された日報情報
+                putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
 
-                    //編集画面を再表示
-                    forward(ForwardConst.FW_REP_EDIT);
-                } else {
-                    //更新中にエラーがなかった場合
+                //編集画面を再表示
+                forward(ForwardConst.FW_REP_EDIT);
+            } else {
+                //更新中にエラーがなかった場合
 
-                    //セッションに更新完了のフラッシュメッセージを設定
-                    putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
+                //セッションに更新完了のフラッシュメッセージを設定
+                putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
 
-                    //一覧画面にリダイレクト
-                    redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+                //一覧画面にリダイレクト
+                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
 
-                }
             }
         }
+    }
 }

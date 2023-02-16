@@ -51,19 +51,26 @@ public class LoginFilter implements Filter {
         } else {
             HttpSession session = ((HttpServletRequest) request).getSession();
 
+
             //クエリパラメータからactionとcommandを取得
             String action = request.getParameter(ForwardConst.ACT.getValue());
             String command = request.getParameter(ForwardConst.CMD.getValue());
 
-            //セッションからログインしている従業員の情報を取得
+            //セッションからログインしているユーザーの情報を取得
             UserView ev = (UserView) session.getAttribute(AttributeConst.LOGIN_EMP.getValue());
 
             if (ev == null) {
                 //未ログイン
 
-                if (!(ForwardConst.ACT_AUTH.getValue().equals(action)
+                if (ForwardConst.ACT_AUTH.getValue().equals(action)
                         && (ForwardConst.CMD_SHOW_LOGIN.getValue().equals(command)
-                                || ForwardConst.CMD_LOGIN.getValue().equals(command)))) {
+                                || ForwardConst.CMD_LOGIN.getValue().equals(command))) {
+
+                }else if (ForwardConst.ACT_EMP.getValue().equals(action)
+                            && (ForwardConst.CMD_NEW.getValue().equals(command)
+                                    || ForwardConst.CMD_CREATE.getValue().equals(command))) {
+
+                } else {
 
                     //ログインページの表示またはログイン実行以外はログインページにリダイレクト
                     ((HttpServletResponse) response).sendRedirect(
@@ -72,7 +79,9 @@ public class LoginFilter implements Filter {
                                     + "&command=" + ForwardConst.CMD_SHOW_LOGIN.getValue());
                     return;
                 }
+
             } else {
+
                 //ログイン済
 
                 if (ForwardConst.ACT_AUTH.getValue().equals(action)) {
@@ -104,9 +113,9 @@ public class LoginFilter implements Filter {
 
             //次のフィルタまたはサーブレットを呼び出し
             chain.doFilter(request, response);
-        }
-    }
 
+            }
+        }
     /**
      * @see Filter#init(FilterConfig)
      */
